@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="card" style="max-width:440px;margin:50px auto;">
+  <span class="badge badge-red">A03 – SQL Injection</span>
+  <span class="badge badge-orange">A07 – Auth Failures</span>
+  <h2>Login to VulnBank</h2>
+  {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+  {% if brute_banner %}
+  <div class="alert alert-warn">
+    <strong>⚠️ No lockout in effect.</strong> Brute-force flag:<br>
+    <code style="font-size:0.95rem;color:#4ade80;">{{ brute_banner }}</code>
+  </div>
+  {% endif %}
+  <form method="POST">
+    <label>Username</label>
+    <input type="text" name="username" placeholder="Try: admin' --" required>
+    <label>Password</label>
+    <input type="password" name="password" placeholder="anything when injecting">
+    <button class="btn btn-primary" type="submit" style="width:100%">Login</button>
+  </form>
+  <p style="margin-top:14px;font-size:0.83rem;color:#555;">No account? <a href="{{ url_for('register') }}" style="color:#e63946;">Register</a></p>
+</div>
+{% endblock %}

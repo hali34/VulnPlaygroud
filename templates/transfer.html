@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Transfer{% endblock %}
+{% block content %}
+<div class="card">
+  <span class="badge badge-yellow">A04 – Insecure Design</span>
+  <span class="badge badge-orange">No CSRF Token</span>
+  <h2>Transfer Funds</h2>
+  {% if msg %}<div class="alert {% if 'bypassed' in msg or 'drained' in msg %}alert-warn{% else %}alert-success{% endif %}">{{ msg }}</div>{% endif %}
+  {% if flag_reveal %}
+  <div class="flag-box" style="margin-bottom:16px;">
+    <p style="font-size:0.78rem;color:#888;margin-bottom:4px;">BUSINESS LOGIC FLAG:</p>
+    <span class="flag-value">{{ flag_reveal }}</span>
+  </div>
+  {% endif %}
+  <!-- No CSRF token in this form (A04) -->
+  <form method="POST">
+    <label>Transfer To</label>
+    <select name="to_user">
+      {% for u in users %}<option value="{{ u.id }}">{{ u.username }} — ${{ "%.2f"|format(u.balance) }}</option>{% endfor %}
+    </select>
+    <label>Amount</label>
+    <input type="number" name="amount" step="0.01" placeholder="Enter negative value (e.g. -9999) to drain target">
+    <p style="font-size:0.78rem;color:#555;margin-top:-10px;margin-bottom:14px;">💡 No server-side amount validation. Negative values steal money FROM the target.</p>
+    <label>Note</label>
+    <input type="text" name="note" placeholder="Transaction note">
+    <button class="btn btn-primary" type="submit">Transfer</button>
+  </form>
+</div>
+{% endblock %}

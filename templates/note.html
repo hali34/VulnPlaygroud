@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Note #{{ note.id }}{% endblock %}
+{% block content %}
+<div class="card">
+  <span class="badge badge-red">A01 – IDOR (Broken Access Control)</span>
+  <h2>Note #{{ note.id }}</h2>
+  <p style="color:#555;font-size:0.82rem;margin-bottom:14px;">Owner: user_id={{ note.user_id }} | Your ID: {{ session.user_id }} | Access check: <span style="color:#e63946;font-weight:700;">NONE</span></p>
+  <div style="background:#0a0a18;border:1px solid #252545;border-radius:7px;padding:18px;white-space:pre-wrap;font-family:monospace;font-size:0.88rem;line-height:1.7;color:{% if 'FLAG{' in note.content %}#4ade80{% else %}#ccc{% endif %};">{{ note.content }}</div>
+  <p style="margin-top:12px;font-size:0.78rem;color:#555;">💡 Try /note/1, /note/2, /note/3, /note/4</p>
+</div>
+{% endblock %}

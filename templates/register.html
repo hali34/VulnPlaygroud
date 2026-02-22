@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<div class="card" style="max-width:440px;margin:50px auto;">
+  <span class="badge badge-orange">A07 – Auth Failures</span>
+  <h2>Create Account</h2>
+  {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+  <form method="POST">
+    <label>Username</label>
+    <input type="text" name="username" required>
+    <label>Email</label>
+    <input type="email" name="email">
+    <label>Password</label>
+    <input type="password" name="password" placeholder="Even a single character is accepted">
+    <p style="font-size:0.78rem;color:#555;margin-top:-10px;margin-bottom:14px;">⚠️ No complexity requirements, no CAPTCHA.</p>
+    <button class="btn btn-primary" type="submit" style="width:100%">Register</button>
+  </form>
+</div>
+{% endblock %}

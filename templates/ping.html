@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Ping (Command Injection){% endblock %}
+{% block content %}
+<div class="card">
+  <span class="badge badge-red">A03 – OS Command Injection</span>
+  <h2>Network Ping Tool</h2>
+  <div style="background:#0a0a18;border:1px solid #1e1e3a;border-radius:6px;padding:12px 14px;margin-bottom:16px;">
+    <p style="font-size:0.78rem;color:#555;margin-bottom:6px;">💡 Injection payloads:</p>
+    <code style="display:block;font-size:0.78rem;color:#f9a8d4;">127.0.0.1; id</code>
+    <code style="display:block;font-size:0.78rem;color:#f9a8d4;margin-top:3px;">127.0.0.1; cat /tmp/cmdi_flag.txt</code>
+    <code style="display:block;font-size:0.78rem;color:#f9a8d4;margin-top:3px;">127.0.0.1 && whoami && uname -a</code>
+  </div>
+  <form method="POST" style="display:flex;gap:10px;align-items:flex-end;">
+    <div style="flex:1;">
+      <label>Host to ping</label>
+      <input type="text" name="host" value="{{ host }}" placeholder="127.0.0.1; cat /tmp/cmdi_flag.txt" style="margin:0;">
+    </div>
+    <button class="btn btn-primary" type="submit" style="flex-shrink:0;">Ping</button>
+  </form>
+  {% if output %}
+  <div style="margin-top:20px;">
+    <h3>Output</h3>
+    <pre>{{ output }}</pre>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

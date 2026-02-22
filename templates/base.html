@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VulnBank – {% block title %}Home{% endblock %}</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0d0d1a; color: #e0e0e0; min-height: 100vh; }
+    nav { background: #13132a; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #e63946; height: 56px; }
+    .nav-logo { font-size: 1.3rem; font-weight: 800; color: #e63946; letter-spacing: 1px; }
+    .nav-logo span { color: #fff; }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a { color: #888; text-decoration: none; padding: 6px 10px; border-radius: 5px; font-size: 0.83rem; }
+    .nav-links a:hover { color: #fff; background: rgba(255,255,255,.06); }
+    .nav-links a.active { color: #e63946; }
+    .container { max-width: 980px; margin: 36px auto; padding: 0 20px; }
+    .card { background: #13132a; border: 1px solid #252545; border-radius: 10px; padding: 28px; margin-bottom: 22px; }
+    h1,h2,h3 { color: #fff; margin-bottom: 14px; }
+    h1 { font-size: 1.6rem; } h2 { font-size: 1.25rem; } h3 { font-size: 1.05rem; }
+    .badge { display: inline-block; padding: 2px 9px; border-radius: 4px; font-size: 0.72rem; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; margin-right: 6px; margin-bottom: 10px; }
+    .badge-red { background: #e63946; color: #fff; }
+    .badge-orange { background: #f4845f; color: #fff; }
+    .badge-yellow { background: #e9c46a; color: #1a1a1a; }
+    .badge-green { background: #4ade80; color: #0d0d1a; }
+    .badge-blue { background: #60a5fa; color: #0d0d1a; }
+    .badge-purple { background: #a78bfa; color: #0d0d1a; }
+    label { display: block; font-size: 0.82rem; color: #888; margin-bottom: 5px; }
+    input[type=text], input[type=password], input[type=email], input[type=number], select, textarea { width: 100%; padding: 9px 13px; margin-bottom: 14px; background: #0d0d1a; border: 1px solid #252545; border-radius: 7px; color: #e0e0e0; font-size: 0.92rem; font-family: inherit; }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: #e63946; }
+    .btn { display: inline-block; padding: 9px 20px; border: none; border-radius: 7px; cursor: pointer; font-size: 0.88rem; font-weight: 600; text-decoration: none; }
+    .btn-primary { background: #e63946; color: #fff; }
+    .btn-primary:hover { background: #c1121f; }
+    .btn-secondary { background: #252545; color: #ccc; }
+    .btn-secondary:hover { background: #2e2e55; }
+    .btn-green { background: #4ade80; color: #0d0d1a; }
+    .btn-sm { padding: 5px 12px; font-size: 0.8rem; }
+    .alert { padding: 11px 16px; border-radius: 7px; margin-bottom: 14px; font-size: 0.9rem; }
+    .alert-error { background: rgba(230,57,70,.12); border: 1px solid #e63946; color: #ff8080; }
+    .alert-success { background: rgba(74,222,128,.12); border: 1px solid #4ade80; color: #86efac; }
+    .alert-info { background: rgba(96,165,250,.12); border: 1px solid #60a5fa; color: #93c5fd; }
+    .alert-warn { background: rgba(249,196,90,.12); border: 1px solid #f9c45a; color: #fde68a; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 9px 13px; text-align: left; border-bottom: 1px solid #1e1e3a; font-size: 0.88rem; }
+    th { color: #888; font-size: 0.75rem; text-transform: uppercase; letter-spacing: .5px; }
+    pre { background: #0a0a18; border: 1px solid #252545; padding: 14px; border-radius: 7px; overflow-x: auto; font-size: 0.83rem; color: #4ade80; line-height: 1.6; }
+    code { background: #1a1a30; padding: 2px 6px; border-radius: 4px; font-size: 0.85em; color: #f9a8d4; }
+    .hint { font-size: 0.78rem; color: #555; margin-top: -8px; margin-bottom: 12px; }
+    .flag-box { background: rgba(74,222,128,.08); border: 1px solid #4ade80; border-radius: 7px; padding: 14px 18px; margin-top: 14px; }
+    .flag-value { font-family: monospace; font-size: 1.05rem; color: #4ade80; letter-spacing: .5px; }
+    .text-muted { color: #555; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-logo">Vuln<span>Bank</span></div>
+    <div class="nav-links">
+      {% if session.username %}
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('exercises') }}" {% if request.endpoint == 'exercises' %}style="color:#e63946"{% endif %}>🎯 Exercises</a>
+        <a href="{{ url_for('board') }}">Board</a>
+        <a href="{{ url_for('search') }}">Search</a>
+        <a href="{{ url_for('transfer') }}">Transfer</a>
+        <a href="{{ url_for('fetch_url') }}">SSRF</a>
+        <a href="{{ url_for('ping') }}">Ping</a>
+        <a href="{{ url_for('prefs') }}">Prefs</a>
+        <a href="{{ url_for('profile') }}">Profile</a>
+        {% if session.role == 'admin' %}<a href="{{ url_for('admin_panel') }}" style="color:#e63946">Admin</a>{% endif %}
+        <a href="{{ url_for('logout') }}" style="color:#555">Logout ({{ session.username }})</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('register') }}">Register</a>
+      {% endif %}
+    </div>
+  </nav>
+  <div class="container">{% block content %}{% endblock %}</div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+{% block content %}
+<div class="card">
+  <span class="badge badge-red">A03 – SQL Injection (UNION-based)</span>
+  <h2>User Search</h2>
+  <form method="GET" style="display:flex;gap:10px;align-items:flex-end;">
+    <div style="flex:1;">
+      <label>Search username</label>
+      <input type="text" name="q" value="{{ query }}" placeholder="' UNION SELECT id,name,value FROM secrets--" style="margin:0;">
+    </div>
+    <button class="btn btn-primary" type="submit" style="flex-shrink:0;">Search</button>
+  </form>
+  <div style="margin-top:10px;padding:10px 14px;background:#0a0a18;border-radius:6px;border:1px solid #1e1e3a;">
+    <p style="font-size:0.78rem;color:#555;">💡 Payloads to try:</p>
+    <code style="font-size:0.78rem;display:block;margin-top:4px;color:#f9a8d4;">' UNION SELECT 1,2,3--</code>
+    <code style="font-size:0.78rem;display:block;margin-top:3px;color:#f9a8d4;">' UNION SELECT id,name,value FROM secrets--</code>
+  </div>
+</div>
+{% if results %}
+<div class="card">
+  <h3>Results <span style="font-size:0.78rem;color:#555;">({{ results|length }} rows)</span></h3>
+  <table>
+    <tr><th>Col 1</th><th>Col 2</th><th>Col 3</th></tr>
+    {% for r in results %}
+    <tr>
+      <td>{{ r[0] }}</td>
+      <td>{{ r[1] }}</td>
+      <td style="{% if 'FLAG{' in r[2]|string %}color:#4ade80;font-family:monospace;font-weight:700;{% endif %}">{{ r[2] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+{% endblock %}

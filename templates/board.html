@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Message Board{% endblock %}
+{% block content %}
+<div class="card">
+  <span class="badge badge-red">A03 – Stored XSS</span>
+  <h2>Message Board</h2>
+  <form method="POST" style="margin-bottom:8px;">
+    <label>Post a message — raw HTML/JS rendered (<code>|safe</code> filter active)</label>
+    <textarea name="content" rows="3" placeholder='XSS payloads:&#10;<script>fetch("/steal?c="+document.cookie)</script>&#10;<img src=x onerror="alert(document.cookie)">'></textarea>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <button class="btn btn-primary" type="submit">Post</button>
+      <a href="{{ url_for('trigger_admin') }}" class="btn btn-secondary btn-sm">🤖 Trigger Admin Bot</a>
+      <a href="{{ url_for('stolen_cookies') }}" class="btn btn-secondary btn-sm">🍪 View Stolen Cookies</a>
+    </div>
+  </form>
+</div>
+<div class="card">
+  <h3>Messages</h3>
+  {% for m in messages %}
+  <div style="border-bottom:1px solid #1e1e3a;padding:12px 0;{% if loop.last %}border-bottom:none{% endif %}">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+      <strong style="color:#e63946;font-size:0.9rem;">{{ m.author }}</strong>
+      <span style="color:#444;font-size:0.78rem;">{{ m.timestamp }}</span>
+    </div>
+    <div>{{ m.content | safe }}</div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

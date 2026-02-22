@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Greet{% endblock %}
+{% block content %}
+<div class="card">
+  <span class="badge badge-red">A03 – Reflected XSS</span>
+  <h2>Hello, {{ name | safe }}!</h2>
+  <p style="color:#555;font-size:0.85rem;">The <code>name</code> URL parameter is reflected without encoding.</p>
+  <p style="font-size:0.78rem;color:#444;margin-top:8px;">💡 Try: <code>/greet?name=&lt;img src=x onerror=alert(document.cookie)&gt;</code></p>
+</div>
+{% endblock %}

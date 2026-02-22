@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}URL Fetch (SSRF){% endblock %}
+{% block content %}
+<div class="card">
+  <span class="badge badge-red">A10 – SSRF</span>
+  <h2>URL Fetcher</h2>
+  <div style="background:#0a0a18;border:1px solid #1e1e3a;border-radius:6px;padding:12px 14px;margin-bottom:16px;">
+    <p style="font-size:0.78rem;color:#555;margin-bottom:6px;">💡 Useful targets:</p>
+    <code style="display:block;font-size:0.78rem;color:#f9a8d4;">http://127.0.0.1:5000/api/internal  ← internal-only (403 from browser)</code>
+    <code style="display:block;font-size:0.78rem;color:#f9a8d4;margin-top:3px;">http://127.0.0.1:5000/api/health    ← exposes secret key</code>
+    <code style="display:block;font-size:0.78rem;color:#f9a8d4;margin-top:3px;">http://169.254.169.254/latest/meta-data/  ← AWS metadata (cloud)</code>
+  </div>
+  <form method="POST" style="display:flex;gap:10px;align-items:flex-end;">
+    <div style="flex:1;">
+      <label>URL to fetch from the server</label>
+      <input type="text" name="url" value="{{ url }}" placeholder="http://127.0.0.1:5000/api/internal" style="margin:0;">
+    </div>
+    <button class="btn btn-primary" type="submit" style="flex-shrink:0;">Fetch</button>
+  </form>
+  {% if content %}
+  <div style="margin-top:20px;">
+    <h3>Server Response</h3>
+    <pre>{{ content }}</pre>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

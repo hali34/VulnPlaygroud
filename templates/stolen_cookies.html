@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Stolen Cookies{% endblock %}
+{% block content %}
+<div class="card">
+  <span class="badge badge-red">A03 – Stored XSS — Cookie Theft Evidence</span>
+  <h2>🍪 Stolen Cookies</h2>
+  <p style="color:#888;font-size:0.88rem;margin-bottom:16px;">
+    Cookies captured by the <code>/steal?c=</code> endpoint. After posting an XSS payload and triggering the admin bot,
+    the admin's session cookie (containing the flag) will appear here.
+  </p>
+  <a href="{{ url_for('trigger_admin') }}" class="btn btn-primary btn-sm" style="margin-bottom:16px;">
+    🤖 Trigger Admin Bot Visit
+  </a>
+  {% if cookies %}
+  <table>
+    <tr><th>#</th><th>Captured Cookie</th><th>From</th><th>Time</th></tr>
+    {% for c in cookies %}
+    <tr>
+      <td>{{ c.id }}</td>
+      <td style="font-family:monospace;font-size:0.82rem;color:#f9a8d4;word-break:break-all;">{{ c.cookie }}</td>
+      <td style="color:#666;">{{ c.ip }}</td>
+      <td style="color:#555;font-size:0.8rem;">{{ c.timestamp }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p style="color:#555;">No cookies captured yet. Post a <code>/steal</code> XSS payload on the board, then trigger the admin bot.</p>
+  {% endif %}
+</div>
+{% endblock %}

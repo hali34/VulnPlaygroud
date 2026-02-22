@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:22px;">
+  <div class="card" style="text-align:center;padding:20px;">
+    <div style="font-size:2rem;font-weight:800;color:#4ade80;">${{ "%.2f"|format(user.balance) }}</div>
+    <div style="color:#555;font-size:0.8rem;margin-top:4px;">Balance</div>
+  </div>
+  <div class="card" style="text-align:center;padding:20px;">
+    <div style="font-size:2rem;font-weight:800;color:#60a5fa;">{{ score }}</div>
+    <div style="color:#555;font-size:0.8rem;margin-top:4px;">Flags captured</div>
+  </div>
+  <div class="card" style="text-align:center;padding:20px;">
+    <div style="font-size:2rem;font-weight:800;color:#a78bfa;">{{ total }}</div>
+    <div style="color:#555;font-size:0.8rem;margin-top:4px;">Total challenges</div>
+  </div>
+</div>
+
+<div class="card">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <h2 style="margin:0;">Welcome back, <span style="color:#e63946;">{{ user.username }}</span>
+      {% if user.role == 'admin' %}<span style="font-size:0.75rem;color:#e63946;margin-left:8px;">[ADMIN]</span>{% endif %}
+    </h2>
+    <a href="{{ url_for('exercises') }}" class="btn btn-primary btn-sm">🎯 Go to Exercises</a>
+  </div>
+  <div style="width:100%;height:6px;background:#1e1e3a;border-radius:3px;overflow:hidden;">
+    <div style="width:{{ ((score/total)*100)|int }}%;height:100%;background:linear-gradient(90deg,#e63946,#4ade80);border-radius:3px;"></div>
+  </div>
+  <p style="color:#555;font-size:0.78rem;margin-top:6px;">{{ score }}/{{ total }} challenges complete</p>
+</div>
+
+<div class="card">
+  <h3>Recent Transactions <span style="font-size:0.75rem;color:#e63946;font-weight:400;margin-left:8px;">No audit logging active (A09)</span></h3>
+  {% if txns %}
+  <table>
+    <tr><th>From</th><th>To</th><th>Amount</th><th>Note</th><th>Time</th></tr>
+    {% for t in txns %}
+    <tr>
+      <td>{{ t.from_user }}</td><td>{{ t.to_user }}</td>
+      <td style="color:{% if t.amount < 0 %}#e63946{% else %}#4ade80{% endif %};font-family:monospace;">${{ "%.2f"|format(t.amount) }}</td>
+      <td style="color:#888;">{{ t.note }}</td>
+      <td style="color:#444;font-size:0.8rem;">{{ t.timestamp }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}<p style="color:#555;">No transactions yet.</p>{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block title %}Exercises{% endblock %}
+{% block content %}
+
+{% if result == 'correct' %}
+<div class="alert alert-success">✅ Correct flag! Challenge marked complete.</div>
+{% elif result == 'wrong' %}
+<div class="alert alert-error">❌ Wrong flag. Keep digging.</div>
+{% endif %}
+
+<!-- Header -->
+<div class="card" style="background:linear-gradient(135deg,#13132a,#1a0d2e);border-color:#3b1f6e;">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+    <div>
+      <h1 style="color:#e63946;margin-bottom:6px;">🎯 OWASP Top 10 Challenges</h1>
+      <p style="color:#888;font-size:0.9rem;">Each challenge hides a real flag discoverable through exploitation. No cheating — find them the hard way.</p>
+    </div>
+    <div style="text-align:center;">
+      <div style="font-size:2.8rem;font-weight:800;color:#4ade80;line-height:1;">{{ score }}<span style="color:#444;font-size:1.4rem;">/{{ total }}</span></div>
+      <div style="font-size:0.8rem;color:#666;">flags captured</div>
+      <!-- Progress bar -->
+      <div style="width:180px;height:8px;background:#1e1e3a;border-radius:4px;margin-top:8px;overflow:hidden;">
+        <div style="width:{{ ((score/total)*100)|int }}%;height:100%;background:linear-gradient(90deg,#e63946,#4ade80);border-radius:4px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% set diff_colors = {'Easy': 'badge-green', 'Medium': 'badge-yellow', 'Hard': 'badge-red'} %}
+{% set owasp_colors = {'A01': '#e63946','A02': '#f4845f','A03': '#f9c45a','A04': '#4ade80','A05': '#60a5fa','A06': '#a78bfa','A07': '#f472b6','A08': '#fb923c','A09': '#34d399','A10': '#38bdf8'} %}
+
+{% for ch in challenges %}
+<div class="card" id="{{ ch.id }}" style="border-left: 3px solid {{ owasp_colors.get(ch.code, '#444') }};{% if ch.done %}opacity:0.75;{% endif %}">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+
+    <div style="flex:1;min-width:240px;">
+      <!-- Title row -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
+        <span style="background:{{ owasp_colors.get(ch.code,'#444') }};color:#0d0d1a;padding:2px 9px;border-radius:4px;font-size:0.72rem;font-weight:800;">{{ ch.code }}</span>
+        <h2 style="margin:0;font-size:1.05rem;">{{ ch.title }}</h2>
+        {% if ch.done %}
+          <span style="color:#4ade80;font-size:0.82rem;font-weight:700;">✅ COMPLETE</span>
+        {% endif %}
+      </div>
+
+      <!-- Difficulty + endpoint -->
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
+        <span class="badge {{ diff_colors.get(ch.difficulty,'badge-blue') }}">{{ ch.difficulty }}</span>
+        <code style="font-size:0.78rem;">{{ ch.endpoint | safe }}</code>
+      </div>
+
+      <!-- Objective -->
+      <p style="color:#ccc;font-size:0.88rem;line-height:1.55;margin-bottom:14px;">
+        <strong style="color:#888;font-size:0.75rem;text-transform:uppercase;letter-spacing:.5px;">Objective</strong><br>
+        {{ ch.objective }}
+      </p>
+
+      <!-- Hints collapsible -->
+      <details style="margin-bottom:14px;">
+        <summary style="cursor:pointer;color:#888;font-size:0.82rem;user-select:none;">
+          💡 Show hints ({{ ch.hints|length }})
+        </summary>
+        <div style="margin-top:10px;padding:12px;background:#0d0d1a;border-radius:6px;border:1px solid #1e1e3a;">
+          {% for hint in ch.hints %}
+          <div style="font-size:0.83rem;color:#aaa;padding:4px 0;border-bottom:{% if not loop.last %}1px solid #1a1a30{% else %}none{% endif %};line-height:1.5;">
+            <span style="color:#555;">{{ loop.index }}.</span> {{ hint }}
+          </div>
+          {% endfor %}
+        </div>
+      </details>
+
+      <!-- A09 special: claim button (no flag needed) -->
+      {% if ch.id == 'A09_LOGGING' and not ch.done %}
+      <div style="background:rgba(52,211,153,.08);border:1px solid #34d399;border-radius:7px;padding:12px 14px;margin-bottom:12px;">
+        <p style="color:#6ee7b7;font-size:0.83rem;margin-bottom:8px;">This flag is awarded for recognising the absence of logging. After exploiting any other vulnerability, confirm no log file was created, then claim it.</p>
+        <form method="POST" action="{{ url_for('submit_flag') }}" style="display:inline;">
+          <input type="hidden" name="challenge_id" value="A09_LOGGING">
+          <button type="submit" name="claim" value="1" class="btn btn-green btn-sm">Claim Flag</button>
+        </form>
+      </div>
+      {% endif %}
+
+      <!-- Flag submission form (not shown for A09 or completed) -->
+      {% if ch.id != 'A09_LOGGING' and not ch.done %}
+      <form method="POST" action="{{ url_for('submit_flag') }}" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <input type="hidden" name="challenge_id" value="{{ ch.id }}">
+        <input type="text" name="flag" placeholder="FLAG{...}" style="width:280px;margin:0;font-family:monospace;font-size:0.85rem;">
+        <button type="submit" class="btn btn-primary btn-sm">Submit Flag</button>
+      </form>
+      {% elif ch.done and ch.id != 'A09_LOGGING' %}
+      <div style="color:#4ade80;font-size:0.85rem;">🏆 Flag accepted!</div>
+      {% elif ch.id == 'A09_LOGGING' and ch.done %}
+      <div style="color:#4ade80;font-size:0.85rem;">🏆 Flag claimed!</div>
+      {% endif %}
+    </div>
+
+    <!-- Right column: quick launch button -->
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;min-width:130px;">
+      {% if ch.code == 'A01' and 'IDOR' in ch.title %}
+        <a href="{{ url_for('view_note', note_id=1) }}" class="btn btn-secondary btn-sm">→ Open /note/1</a>
+      {% elif ch.code == 'A01' %}
+        <a href="{{ url_for('admin_panel') }}" class="btn btn-secondary btn-sm">→ Open /admin</a>
+      {% elif ch.code == 'A02' %}
+        <a href="{{ url_for('profile') }}" class="btn btn-secondary btn-sm">→ Open /profile</a>
+      {% elif ch.id == 'A03_SQLI' %}
+        <a href="{{ url_for('search') }}" class="btn btn-secondary btn-sm">→ Open /search</a>
+      {% elif ch.id == 'A03_XSS' %}
+        <a href="{{ url_for('board') }}" class="btn btn-secondary btn-sm">→ Open /board</a>
+        <a href="{{ url_for('stolen_cookies') }}" class="btn btn-secondary btn-sm">→ Stolen Cookies</a>
+      {% elif ch.id == 'A03_CMDI' %}
+        <a href="{{ url_for('ping') }}" class="btn btn-secondary btn-sm">→ Open /ping</a>
+      {% elif ch.code == 'A04' %}
+        <a href="{{ url_for('transfer') }}" class="btn btn-secondary btn-sm">→ Open /transfer</a>
+      {% elif ch.code == 'A05' %}
+        <a href="{{ url_for('health') }}" class="btn btn-secondary btn-sm">→ /api/health</a>
+      {% elif ch.code == 'A07' %}
+        <a href="{{ url_for('login') }}" class="btn btn-secondary btn-sm">→ Open /login</a>
+      {% elif ch.code == 'A08' %}
+        <a href="{{ url_for('prefs') }}" class="btn btn-secondary btn-sm">→ Open /prefs</a>
+      {% elif ch.code == 'A10' %}
+        <a href="{{ url_for('fetch_url') }}" class="btn btn-secondary btn-sm">→ Open /fetch</a>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+{% endfor %}
+
+<!-- Completion banner -->
+{% if score == total %}
+<div class="card" style="background:linear-gradient(135deg,#0d2010,#102010);border:2px solid #4ade80;text-align:center;padding:40px;">
+  <div style="font-size:3rem;margin-bottom:10px;">🏆</div>
+  <h2 style="color:#4ade80;">All Challenges Complete!</h2>
+  <p style="color:#888;margin-top:8px;">You've exploited every OWASP Top 10 vulnerability in VulnBank. Well done.</p>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Welcome{% endblock %}
+{% block content %}
+<div class="card" style="text-align:center;padding:50px 30px;background:linear-gradient(135deg,#13132a,#1a0d2e);border-color:#3b1f6e;">
+  <div style="font-size:3.5rem;margin-bottom:10px;">🏦</div>
+  <h1 style="font-size:2.4rem;color:#e63946;margin-bottom:6px;">VulnBank</h1>
+  <p style="color:#888;margin-bottom:4px;">Deliberately Vulnerable Banking App</p>
+  <p style="color:#555;font-size:0.83rem;margin-bottom:28px;">OWASP Top 10 (2021) — 12 Hands-On Challenges</p>
+  <a href="{{ url_for('login') }}" class="btn btn-primary" style="margin-right:10px;">Login</a>
+  <a href="{{ url_for('register') }}" class="btn btn-secondary">Register</a>
+</div>
+<div class="card">
+  <h2>Challenges Overview</h2>
+  <table>
+    <tr><th>#</th><th>Category</th><th>Challenge</th><th>Difficulty</th></tr>
+    <tr><td>A01</td><td>Broken Access Control</td><td>IDOR + Session Forgery</td><td><span class="badge badge-green">Easy</span> <span class="badge badge-yellow">Medium</span></td></tr>
+    <tr><td>A02</td><td>Cryptographic Failures</td><td>Crack MD5 hash, plaintext cookie</td><td><span class="badge badge-green">Easy</span></td></tr>
+    <tr><td>A03</td><td>Injection</td><td>SQLi (auth bypass + UNION), Stored XSS, Reflected XSS, CMDi</td><td><span class="badge badge-green">Easy</span> <span class="badge badge-yellow">Medium</span></td></tr>
+    <tr><td>A04</td><td>Insecure Design</td><td>Business logic — negative transfer</td><td><span class="badge badge-green">Easy</span></td></tr>
+    <tr><td>A05</td><td>Security Misconfiguration</td><td>Unauthenticated info disclosure</td><td><span class="badge badge-green">Easy</span></td></tr>
+    <tr><td>A06</td><td>Vulnerable Components</td><td>Identify CVEs in requirements.txt</td><td><span class="badge badge-yellow">Medium</span></td></tr>
+    <tr><td>A07</td><td>Auth Failures</td><td>Brute-force with no lockout</td><td><span class="badge badge-yellow">Medium</span></td></tr>
+    <tr><td>A08</td><td>Data Integrity</td><td>Pickle deserialization RCE</td><td><span class="badge badge-red">Hard</span></td></tr>
+    <tr><td>A09</td><td>Logging Failures</td><td>Confirm absence of audit trail</td><td><span class="badge badge-green">Easy</span></td></tr>
+    <tr><td>A10</td><td>SSRF</td><td>Access internal-only endpoint</td><td><span class="badge badge-yellow">Medium</span></td></tr>
+  </table>
+</div>
+<div class="card">
+  <h3>Default Credentials</h3>
+  <pre>admin / admin123   (role: admin)
+alice / password   (role: user)
+bob   / bob123     (role: user)
+charlie / charlie  (role: user)</pre>
+</div>
+{% endblock %}

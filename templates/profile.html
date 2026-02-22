@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<div class="card">
+  <span class="badge badge-red">A02 – Cryptographic Failures</span>
+  <h2>Your Profile</h2>
+  <!-- A02 EXERCISE: Crack the hash below. The flag is hidden in a comment in this page source. -->
+  <!-- Flag (revealed after cracking MD5): {{ crypto_flag }} -->
+  <table>
+    <tr><th>Field</th><th>Value</th></tr>
+    <tr><td>Username</td><td>{{ user.username }}</td></tr>
+    <tr><td>Email</td><td>{{ user.email }}</td></tr>
+    <tr>
+      <td>Password Hash</td>
+      <td>
+        <code style="color:#e63946;">{{ user.password }}</code><br>
+        <span style="font-size:0.75rem;color:#555;">Algorithm: MD5 (no salt) — paste into crackstation.net</span>
+      </td>
+    </tr>
+    <tr><td>SSN</td><td style="color:#e63946;font-family:monospace;">{{ user.ssn }}</td></tr>
+    <tr><td>Balance</td><td style="color:#4ade80;">${{ "%.2f"|format(user.balance) }}</td></tr>
+  </table>
+  <div style="margin-top:16px;padding:12px;background:#0a0a18;border:1px solid #252545;border-radius:6px;">
+    <p style="font-size:0.8rem;color:#555;">💡 Open DevTools → Application → Cookies → look at <code>user_data</code>. Your SSN is stored in plaintext without Secure or HttpOnly flags.</p>
+  </div>
+</div>
+{% endblock %}
