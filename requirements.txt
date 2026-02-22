@@ -1,0 +1,11 @@
+# VulnBank Dependencies
+# A06 - Vulnerable & Outdated Components
+# These are intentionally older versions to demonstrate the risk
+
+flask==2.0.3            # CVE-2023-30861 - cookie samesite bypass in newer; older lacks security defaults
+werkzeug==2.0.3         # CVE-2023-25577 - multipart DoS vulnerability
+requests==2.27.1        # Older version, lacks some security fixes
+jinja2==3.0.3           # Older Jinja2 version
+
+# To see current vulnerabilities, run:
+#   pip install safety && safety check
