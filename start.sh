@@ -1,10 +1,10 @@
 #!/bin/bash
-# VulnBank — Local Setup Script
+# VulnPlayground — Local Setup Script
 
 set -e
 
 echo "================================================="
-echo "  VulnBank — OWASP Top 10 Demo App Setup"
+echo "  VulnPlayground — OWASP Top 10 Demo App Setup"
 echo "================================================="
 echo ""
 
@@ -35,7 +35,7 @@ echo "  ✅  Safe to run on localhost ONLY"
 echo "  🔑  Credentials: admin/admin123  alice/password"
 echo "================================================="
 echo ""
-echo "🚀 Starting VulnBank at http://127.0.0.1:5000"
+echo "🚀 Starting VulnPlayground at http://127.0.0.1:5000"
 echo ""
 
 python app.py
