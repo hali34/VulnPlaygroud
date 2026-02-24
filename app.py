@@ -1,5 +1,5 @@
 """
-VulnBank - Deliberately Vulnerable Flask Application
+VulnPlayground - Deliberately Vulnerable Flask Application
 OWASP Top 10 (2021) - Educational / Portfolio Demo
 
 ⚠️  FOR LOCAL USE ONLY — NEVER DEPLOY TO PRODUCTION
@@ -25,7 +25,7 @@ from functools import wraps
 from datetime import datetime
 
 # Resolve paths relative to this file so the app works regardless of
-# which directory you launch it from (e.g. python vulnbank/app.py)
+# which directory you launch it from (e.g. python VulnPlayground/app.py)
 _HERE = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__,
             template_folder=os.path.join(_HERE, "templates"),
@@ -38,7 +38,7 @@ app = Flask(__name__,
 app.secret_key = "supersecretkey123"
 app.config["DEBUG"] = True
 
-DB_PATH = os.path.join(_HERE, "vulnbank.db")
+DB_PATH = os.path.join(_HERE, "VulnPlayground.db")
 
 # ──────────────────────────────────────────────────
 # FLAGS  (don't look here — find them by exploiting)
@@ -263,10 +263,10 @@ def init_db():
     )""")
 
     users = [
-        (1,"admin",  hashlib.md5(b"admin123").hexdigest(), "admin","admin@vulnbank.com",  "123-45-6789",99999.0),
-        (2,"alice",  hashlib.md5(b"password").hexdigest(), "user", "alice@vulnbank.com",  "987-65-4321",2500.0),
-        (3,"bob",    hashlib.md5(b"bob123").hexdigest(),   "user", "bob@vulnbank.com",    "555-12-3456",750.0),
-        (4,"charlie",hashlib.md5(b"charlie").hexdigest(),  "user", "charlie@vulnbank.com","111-22-3333",300.0),
+        (1,"admin",  hashlib.md5(b"admin123").hexdigest(), "admin","admin@VulnPlayground.com",  "123-45-6789",99999.0),
+        (2,"alice",  hashlib.md5(b"password").hexdigest(), "user", "alice@VulnPlayground.com",  "987-65-4321",2500.0),
+        (3,"bob",    hashlib.md5(b"bob123").hexdigest(),   "user", "bob@VulnPlayground.com",    "555-12-3456",750.0),
+        (4,"charlie",hashlib.md5(b"charlie").hexdigest(),  "user", "charlie@VulnPlayground.com","111-22-3333",300.0),
     ]
     c.executemany(
         "INSERT OR IGNORE INTO users (id,username,password,role,email,ssn,balance) VALUES (?,?,?,?,?,?,?)",
@@ -274,7 +274,7 @@ def init_db():
     )
 
     messages_data = [
-        (1,"system","Welcome to VulnBank. Keep your credentials safe.","2024-01-01 09:00:00"),
+        (1,"system","Welcome to VulnPlayground. Keep your credentials safe.","2024-01-01 09:00:00"),
         (2,"alice", "Has anyone seen the new transfer feature?","2024-01-02 10:30:00"),
         (3,"admin", "Reminder: do not share your session token.","2024-01-02 11:00:00"),
     ]
@@ -645,7 +645,7 @@ def transfer():
 def health():
     return jsonify({
         "status": "ok",
-        "app": "VulnBank",
+        "app": "VulnPlayground",
         "flask_debug": app.config["DEBUG"],
         "secret_key": app.secret_key,
         "db_path": os.path.abspath(DB_PATH),
@@ -658,13 +658,13 @@ def api_internal():
     """Internal-only endpoint — reachable only via SSRF (/fetch proxies with a server-side header)"""
     # This header is only added by the server's own fetch() call, not by a direct browser request.
     # It simulates a service that's firewalled from external clients but reachable server-side.
-    if request.headers.get("X-VulnBank-Internal") != "ssrf-reachable":
+    if request.headers.get("X-VulnPlayground-Internal") != "ssrf-reachable":
         return jsonify({
             "error": "Forbidden. This endpoint is for internal services only.",
             "hint": "Access this via the /fetch SSRF endpoint: http://127.0.0.1:5000/api/internal",
         }), 403
     return jsonify({
-        "service": "VulnBank Internal API",
+        "service": "VulnPlayground Internal API",
         "db_admin_password": "vb-db-admin-p4ss",
         "flag": FLAGS["A10_SSRF"],
         "internal_hosts": ["redis://cache:6379", "postgres://db:5432"],
@@ -699,9 +699,9 @@ def fetch_url():
     if request.method == "POST":
         url = request.form.get("url", "")
         try:
-            # The X-VulnBank-Internal header simulates the server being on an internal network.
+            # The X-VulnPlayground-Internal header simulates the server being on an internal network.
             # Real SSRF works because the server has access to internal services the browser can't reach.
-            r = requests.get(url, timeout=5, headers={"X-VulnBank-Internal": "ssrf-reachable"})
+            r = requests.get(url, timeout=5, headers={"X-VulnPlayground-Internal": "ssrf-reachable"})
             content = r.text[:4000]
         except Exception as e:
             content = f"Error: {e}"
@@ -757,7 +757,7 @@ def logout():
 if __name__ == "__main__":
     init_db()
     print("\n" + "=" * 58)
-    print("  VulnBank  —  OWASP Top 10 Demo")
+    print("  VulnPlayground  —  OWASP Top 10 Demo")
     print("  http://127.0.0.1:5000")
     print("  http://127.0.0.1:5000/exercises   <- Start here")
     print("  Creds: admin/admin123  alice/password  bob/bob123")
