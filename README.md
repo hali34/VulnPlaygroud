@@ -1,4 +1,4 @@
-# 🏦 VulnBank
+# 🏦 VulnPlayground
 
 > **Deliberately vulnerable Flask banking application covering all OWASP Top 10 (2021) categories.**
 > Built as a hands-on appsec/pentest portfolio and training tool.
@@ -6,9 +6,9 @@
 
 ---
 
-## What Is VulnBank?
+## What Is VulnPlayground?
 
-VulnBank is a fake online banking application with 12 purposefully broken security controls — one for each OWASP Top 10 category (with extras for A01 and A03). Every vulnerability has a hidden flag in `FLAG{...}` format that you discover through real exploitation, not by reading source code. Progress is tracked on a `/exercises` challenge board.
+VulnPlayground is a fake online banking application with 12 purposefully broken security controls — one for each OWASP Top 10 category (with extras for A01 and A03). Every vulnerability has a hidden flag in `FLAG{...}` format that you discover through real exploitation, not by reading source code. Progress is tracked on a `/exercises` challenge board.
 
 ---
 
@@ -16,7 +16,7 @@ VulnBank is a fake online banking application with 12 purposefully broken securi
 
 ```bash
 # 1. Navigate to the project directory
-cd vulnbank
+cd VulnPlayground
 
 # 2. Create and activate a virtual environment
 python3 -m venv venv
@@ -67,7 +67,7 @@ Open **http://127.0.0.1:5000** in your browser.
 ## Project Structure
 
 ```
-vulnbank/
+VulnPlayground/
 ├── app.py                  # Flask app — all vulnerabilities here
 ├── requirements.txt        # Intentionally older package versions (A06)
 ├── start.sh                # One-command startup script
@@ -120,7 +120,7 @@ To reset all captured flags and balances:
 
 ```bash
 # Delete the database — it will regenerate on next start
-rm vulnbank.db
+rm VulnPlayground.db
 python app.py
 ```
 
@@ -128,7 +128,7 @@ python app.py
 
 ## A Note on A06 (Vulnerable Components)
 
-VulnBank's `requirements.txt` pins older library versions intentionally. To check for known CVEs:
+VulnPlayground's `requirements.txt` pins older library versions intentionally. To check for known CVEs:
 
 ```bash
 pip install safety
