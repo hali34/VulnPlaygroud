@@ -1,4 +1,4 @@
-# VulnBank — Usage Guide
+# VulnPlayground — Usage Guide
 
 Step-by-step instructions for completing all 12 challenges. Each section tells you what to do, what to submit, and what the exploitation proves.
 
@@ -305,7 +305,7 @@ print(payload)
 1. Perform any exploit — e.g. the SQL injection from Challenge 4
 2. Check for log files in the app directory:
    ```bash
-   ls -la /path/to/vulnbank/
+   ls -la /path/to/VulnPlayground/
    ls -la /var/log/ 2>/dev/null | grep vuln
    ```
 3. Confirm no log file exists (no `*.log`, no `audit.log`, nothing)
@@ -354,7 +354,7 @@ All submitted flags are stored per-user in the database. Your score is visible:
 - On the **Exercises** page (`/exercises`)
 - On your **Dashboard** (`/dashboard`)
 
-To reset: `rm vulnbank.db && python app.py`
+To reset: `rm VulnPlayground.db && python app.py`
 
 ---
 
