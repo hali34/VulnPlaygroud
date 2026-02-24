@@ -1,4 +1,4 @@
-# VulnBank Dependencies
+# VulnPlayground Dependencies
 # A06 - Vulnerable & Outdated Components
 # These are intentionally older versions to demonstrate the risk
 
