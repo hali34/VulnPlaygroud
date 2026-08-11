@@ -9,3 +9,5 @@ jinja2==3.0.3           # Older Jinja2 version
 
 # To see current vulnerabilities, run:
 #   pip install safety && safety check
+
+Check
