@@ -1,4 +1,4 @@
-# [SAST-101] Evaluate an Open-Source SAST Tool Against a Target Repository
+# Evaluate an Open-Source SAST Tool Against a Target Repository
 
 **Project:** AppSec Training
 **Issue Type:** Task
